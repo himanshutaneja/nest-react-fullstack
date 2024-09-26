@@ -3,10 +3,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UserController } from './user/user.controller';
-import { UserService } from './user/user.service';
 import { UserModule } from './user/user.module';
 import configuration from './config/configuration';
+import { UserSeeder } from './user/user.seeder.service';
 
 @Module({
   imports: [
@@ -20,7 +19,13 @@ import configuration from './config/configuration';
     }),
     UserModule,
   ],
-  controllers: [AppController, UserController],
-  providers: [AppService, UserService],
+  controllers: [AppController],
+  providers: [AppService, UserSeeder],
 })
-export class AppModule { }
+export class AppModule {
+  constructor(private readonly userSeeder: UserSeeder) { }
+
+  async onModuleInit() {
+    await this.userSeeder.seedUsers();
+  }
+ }
