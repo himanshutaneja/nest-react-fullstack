@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, HttpStatus, NotFoundException, Post, Put, Query, Res } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDTO } from './dto/create-user.dto';
+import { ValidateObjectId } from '../common/validate-object-id-pipes';
 
 @Controller('user')
 export class UserController {
@@ -24,7 +25,7 @@ export class UserController {
     @Put()
     async editUser(
         @Res() res,
-        @Query('userID') userID,
+        @Query('userID', new ValidateObjectId()) userID,
         @Body() createUserDTO: CreateUserDTO,
     ) {
         const user = await this.userService.editUser(userID, createUserDTO);
@@ -38,7 +39,7 @@ export class UserController {
     }
 
     @Delete()
-    async deleteUser(@Res() res, @Query('userID') userID) {
+    async deleteUser(@Res() res, @Query('userID', new ValidateObjectId()) userID) {
         const user = await this.userService.deleteUser(userID);
         if (!user) {
             throw new NotFoundException('User does not exist.');
