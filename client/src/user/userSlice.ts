@@ -3,7 +3,7 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from '../store'
 
 export interface User {
-    id: string;
+    _id: string;
     name: string;
     email: string;
     phone: string;
@@ -21,13 +21,23 @@ const initialState: UserState = {
     error: undefined,
 }
 
-export const fetchUsers = createAsyncThunk(
+export const fetchUsers = createAsyncThunk<User[]>(
     "users/fetchUsers",
-    () => {
-        const res = fetch('/api/user').then(data => data.json());
-        return res;
+    async () => {
+        const res = await fetch('/api/user');
+        return res.json();
     }
 )
+
+export const deleteUser = createAsyncThunk<void, string>(
+    "users/deleteUser",
+    async (userID, { dispatch }) => {
+        await fetch(`/api/user?userID=${userID}`, {
+            method: "DELETE",
+        });
+        dispatch(fetchUsers());
+    }
+);
 
 const userSlice = createSlice({
     name: 'users',
