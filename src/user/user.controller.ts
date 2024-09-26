@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpStatus, NotFoundException, Post, Put, Query, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, NotFoundException, Post, Put, Query, Res, UsePipes, ValidationPipe } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { ValidateObjectId } from '../common/validate-object-id-pipes';
@@ -14,6 +14,7 @@ export class UserController {
     }
 
     @Post()
+    @UsePipes(ValidationPipe)
     async addUser(@Res() res, @Body() createUserDTO: CreateUserDTO) {
         const user = await this.userService.addUser(createUserDTO);
         return res.status(HttpStatus.OK).json({
@@ -23,6 +24,7 @@ export class UserController {
     }
 
     @Put()
+    @UsePipes(ValidationPipe)
     async editUser(
         @Res() res,
         @Query('userID', new ValidateObjectId()) userID,
