@@ -8,7 +8,11 @@ async function bootstrap() {
 
   const { httpAdapter } = app.get(HttpAdapterHost);
   app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
-  
+
+  app.setGlobalPrefix('api')
+
+  app.enableCors();
+
   const configService: ConfigService = app.get(ConfigService);
   await app.listen(configService.get<number>('port'));
 }
