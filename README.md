@@ -39,6 +39,8 @@ $ yarn install
 ```
 Install MongoDB and ensure service is running on local machine.
 
+Make a copy of .env.template file and save as .env and set the values for PORT and MONGO_URI according to your environment or leave them as is.
+
 ## Compile and run the project
 
 ```bash
