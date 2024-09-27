@@ -15,6 +15,11 @@ export interface UserState {
     error: string | undefined;
 }
 
+interface DeleteUserState {
+    message: string;
+    user: User;
+}
+
 const initialState: UserState = {
     loading: false,
     users: [],
@@ -29,13 +34,14 @@ export const fetchUsers = createAsyncThunk<User[]>(
     }
 )
 
-export const deleteUser = createAsyncThunk<void, string>(
+export const deleteUser = createAsyncThunk<DeleteUserState, string>(
     "users/deleteUser",
     async (userID, { dispatch }) => {
-        await fetch(`/api/user?userID=${userID}`, {
+        const res = await fetch(`/api/user?userID=${userID}`, {
             method: "DELETE",
         });
-        dispatch(fetchUsers());
+        // dispatch(fetchUsers());
+        return res.json();
     }
 );
 
@@ -55,6 +61,14 @@ const userSlice = createSlice({
             state.users = [];
             state.error = action.error.message;
         });
+        builder.addCase(deleteUser.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(deleteUser.fulfilled, (state, action: PayloadAction<DeleteUserState>) => {
+            state.loading = false;
+            const deletedUserId = action.payload.user._id;
+            state.users = state.users.filter(({_id}) => _id !== deletedUserId);
+        })
     },
     reducers: {}
 })
