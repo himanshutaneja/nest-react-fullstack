@@ -9,7 +9,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
-  let userSeeder = { seedUsers: () => {} };
+  const userSeeder = { seedUsers: () => {} };
 
   beforeAll(async () => {
     await mongoose.connect('mongodb://localhost/test');
