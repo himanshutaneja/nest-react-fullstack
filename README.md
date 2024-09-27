@@ -37,29 +37,30 @@ $ cd client
 $ yarn install
 
 ```
+Install MongoDB and ensure service is running on local machine.
 
 ## Compile and run the project
 
 ```bash
-# development
+# run server 
+$ yarn run start:server
+
+# run client
+$ yarn run start:client
+
+# run server and client concurrently
 $ yarn run start
-
-# watch mode
-$ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
 ```
 
 ## Run tests
 
 ```bash
-# unit tests
-$ yarn run test
+# unit tests server
+$ yarn run test:server
 
-# e2e tests
-$ yarn run test:e2e
+# e2e tests server
+$ yarn run test:server:e2e
 
-# test coverage
-$ yarn run test:cov
+# unit test client
+$ yarn run test:client
 ```
