@@ -10,10 +10,13 @@ describe('UserService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [UserService, {
-        provide: getModelToken(User.name),
-        useValue: Model,
-      }],
+      providers: [
+        UserService,
+        {
+          provide: getModelToken(User.name),
+          useValue: Model,
+        },
+      ],
     }).compile();
 
     service = module.get<UserService>(UserService);
@@ -26,14 +29,14 @@ describe('UserService', () => {
 
   it('should return users', async () => {
     const user = new User();
-    user.name = "abc"
+    user.name = 'abc';
     const mockResponse = [user];
     jest
-      .spyOn(mockUserModel, 'find').mockReturnThis()
+      .spyOn(mockUserModel, 'find')
+      .mockReturnThis()
       .mockReturnValue({
-        exec: jest.fn().mockResolvedValueOnce(mockResponse)
-      } as unknown as Query<User[], any>)
-
+        exec: jest.fn().mockResolvedValueOnce(mockResponse),
+      } as unknown as Query<User[], any>);
 
     const response = await service.getUsers();
 

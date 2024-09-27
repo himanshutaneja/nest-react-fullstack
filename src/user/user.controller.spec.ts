@@ -12,12 +12,13 @@ describe('UserController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UserController],
-      providers: [UserService,
+      providers: [
+        UserService,
         {
           provide: getModelToken(User.name),
           useValue: Model,
-        }
-      ]
+        },
+      ],
     }).compile();
 
     controller = module.get<UserController>(UserController);
@@ -25,52 +26,61 @@ describe('UserController', () => {
   });
 
   it('should return users', async () => {
-
-    const result = [{ name: 'abc', email: 'abc@test.com', phone: '+61123123123' }];
-    jest.spyOn(userService, 'getUsers').mockImplementation(() => new Promise((resolve) => resolve(result)));
+    const result = [
+      { name: 'abc', email: 'abc@test.com', phone: '+61123123123' },
+    ];
+    jest
+      .spyOn(userService, 'getUsers')
+      .mockImplementation(() => new Promise((resolve) => resolve(result)));
 
     const responseMock = {
       status: jest.fn(() => ({
-        json: jest.fn((x) => x)
+        json: jest.fn((x) => x),
       })),
-    } as unknown as Response
+    } as unknown as Response;
 
     expect(await controller.getUsers(responseMock)).toBe(result);
   });
 
   it('should delete user', async () => {
-
-    const result = { name: 'abc', email: 'abc@test.com', phone: '+61123123123' };
-    jest.spyOn(userService, 'deleteUser').mockImplementation(() => new Promise((resolve) => resolve(result)));
+    const result = {
+      name: 'abc',
+      email: 'abc@test.com',
+      phone: '+61123123123',
+    };
+    jest
+      .spyOn(userService, 'deleteUser')
+      .mockImplementation(() => new Promise((resolve) => resolve(result)));
 
     const responseMock = {
       status: jest.fn(() => ({
         json: jest.fn((x) => ({
           message: 'User has been deleted!',
-          user: x
-        }))
+          user: x,
+        })),
       })),
-    } as unknown as Response
+    } as unknown as Response;
 
-    const response = await controller.deleteUser(responseMock, 123)
+    const response = await controller.deleteUser(responseMock, 123);
     expect(response.message).toBe('User has been deleted!');
   });
 
   it('should throw error for invalid delete user id', async () => {
-
-    jest.spyOn(userService, 'deleteUser').mockImplementation(() => new Promise((resolve) => resolve(undefined)));
+    jest
+      .spyOn(userService, 'deleteUser')
+      .mockImplementation(() => new Promise((resolve) => resolve(undefined)));
 
     const responseMock = {
       status: jest.fn(() => ({
         json: jest.fn((x) => ({
           message: 'User has been deleted!',
-          user: x
-        }))
+          user: x,
+        })),
       })),
-    } as unknown as Response
+    } as unknown as Response;
 
     try {
-      await controller.deleteUser(responseMock, 123)
+      await controller.deleteUser(responseMock, 123);
     } catch (e) {
       expect(e.message).toBe('User does not exist.');
     }

@@ -23,9 +23,9 @@ import { UserSeeder } from './user/user.seeder.service';
   providers: [AppService, UserSeeder],
 })
 export class AppModule {
-  constructor(private readonly userSeeder: UserSeeder) { }
+  constructor(private readonly userSeeder: UserSeeder) {}
 
   async onModuleInit() {
     await this.userSeeder.seedUsers();
   }
- }
+}
